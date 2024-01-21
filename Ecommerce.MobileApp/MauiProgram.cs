@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Ecommerce.MobileApp.DataServices;
+using Microsoft.Extensions.Logging;
 
 namespace Ecommerce.MobileApp
 {
@@ -14,6 +15,9 @@ namespace Ecommerce.MobileApp
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+
+            builder.Services.AddScoped<IRestDataService, RestDataService>();
 
 #if DEBUG
 		builder.Logging.AddDebug();
