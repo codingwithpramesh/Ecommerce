@@ -28,14 +28,63 @@ namespace Ecommerce.MobileApp.DataServices
         }
 
 
-        public Task AddTodoAsync(Todo item)
+        public async Task AddTodoAsync(Todo item)
         {
-            throw new NotImplementedException();
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+            {
+                Debug.WriteLine("--- No Internet Access ---");
+                return;
+            }
+
+            try
+            {
+                string JsonTodo = JsonSerializer.Serialize<Todo>(item, _jsonSerializerOptions);
+                StringContent content = new StringContent(JsonTodo,Encoding.UTF8, "application/json");
+
+
+                HttpResponseMessage response = await _httpClient.PostAsync($"{_url}/todo", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine("Successfully Created Todo");
+                }else
+                {
+                    Debug.WriteLine("Non Http 2xx Response");
+                }
+
+            }catch(Exception ex)
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+            }
+            return;
         }
 
-        public Task DeleteTodoAsync(int id)
+        public async Task DeleteTodoAsync(int id)
         {
-            throw new NotImplementedException();
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+            {
+                Debug.WriteLine("--- No Internet Access ---");
+                return;
+            }
+
+            try
+            {
+                HttpResponseMessage response = await _httpClient.DeleteAsync($"{_url}/todo{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine("Successfully Deleted Todo");
+                }
+                else
+                {
+                    Debug.WriteLine("Non Http 2xx Response");
+                }
+
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine($"Exception {ex.Message}");
+            }
+
+
         }
 
         public async Task<List<Todo>> GetAllTodosAsync()
@@ -67,9 +116,37 @@ namespace Ecommerce.MobileApp.DataServices
             return todos;
         }
 
-        public Task UpdateTodo(Todo item)
+        public async Task UpdateTodo(Todo item)
         {
-            throw new NotImplementedException();
+
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+            {
+                Debug.WriteLine("--- No Internet Access ---");
+                return;
+            }
+
+            try
+            {
+                string JsonTodo = JsonSerializer.Serialize<Todo>(item, _jsonSerializerOptions);
+                StringContent content = new StringContent(JsonTodo, Encoding.UTF8, "application/json");
+
+
+                HttpResponseMessage response = await _httpClient.PutAsync($"{_url}/todo/{item.Id}", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine("Successfully Created Todo");
+                }
+                else
+                {
+                    Debug.WriteLine("Non Http 2xx Response");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+            }
+            return;
         }
     }
 }

@@ -87,6 +87,39 @@ namespace Ecommerce.WebAPI
 
             });
 
+            app.MapPut("api/todo/{id}", async (ApplicationDbContext context, int id, [FromBody] Todo todo) =>
+            {
+
+               var data = context.Todos.FirstOrDefault(x => x.Id == id);
+
+                if (data == null)
+                {
+                    return Results.NotFound();
+                }
+
+                data.TodoName = todo.TodoName;
+                await context.SaveChangesAsync();
+                return Results.Ok(data);
+            
+            });
+
+
+            app.MapDelete("api/todo/{id}", async (ApplicationDbContext context, int id, [FromBody] Todo todo) =>
+            {
+                var data = context.Todos.FirstOrDefault(y => y.Id == id);
+                if (data == null)
+                {
+                    return Results.NotFound();
+
+                }
+
+                context.Todos.Remove(data);
+                await context.SaveChangesAsync();
+                return Results.NoContent();
+
+            });
+
+
          //   app.Mapidentity
             app.MapControllers();
 

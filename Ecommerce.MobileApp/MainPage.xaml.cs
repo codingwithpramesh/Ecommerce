@@ -1,24 +1,37 @@
-﻿namespace Ecommerce.MobileApp
+﻿using Ecommerce.MobileApp.DataServices;
+using System.Diagnostics;
+
+namespace Ecommerce.MobileApp
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
 
-        public MainPage()
+        private readonly IRestDataService _service;
+        public MainPage(IRestDataService service)
         {
+            _service = service;
             InitializeComponent();
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        protected  async Task onAppearingAsync()
         {
-            count++;
+            base.OnAppearing();
+            //collectionview.ItemSource = await _service.GetAllTodosAsync();
+        }
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
+        async void onAddToDoClicked(object sender, EventArgs e)
+        {
+            Debug.WriteLine("--- Add Button Clicked ----");
+        }
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
+        async void OnSelectionChanged(object sender , SelectedItemChangedEventArgs e)
+        {
+            Debug.WriteLine("==>");
+        }
+
+        private void ToolbarItem_Clicked(object sender, EventArgs e)
+        {
+
         }
     }
 }

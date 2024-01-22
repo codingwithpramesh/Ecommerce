@@ -17,7 +17,7 @@ namespace Ecommerce.MobileApp
                 });
 
 
-            builder.Services.AddScoped<IRestDataService, RestDataService>();
+            builder.Services.AddSingleton<IRestDataService, RestDataService>();
 
 #if DEBUG
 		builder.Logging.AddDebug();
